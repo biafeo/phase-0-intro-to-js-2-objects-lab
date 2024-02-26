@@ -1,15 +1,13 @@
 require ( './helpers.js' );
-
 describe('employees', function() {
+  let employee;
+
+  beforeEach(function () {
+    employee = {}; // Define the employee object
+    employee.name = 'Sam';
+  });
+
   describe('updateEmployeeWithKeyAndValue(employee, key, value)', function () {
-    beforeEach(function () {
-      for (const key in employee) {
-        delete employee[key];
-      }
-
-      employee.name = 'Sam';
-    });
-
     it('returns an employee with the original key value pairs and the new key value pair', function () {
       expect(updateEmployeeWithKeyAndValue(employee, 'streetAddress', '11 Broadway')).to.eql({
         name: 'Sam',
@@ -22,6 +20,21 @@ describe('employees', function() {
 
       expect(employee['streetAddress']).to.equal(undefined);
     });
+  });
+});
+
+function updateEmployeeWithKeyAndValue(employee, key, value) {
+  const updatedEmployee = { ...employee };
+  updatedEmployee[key] = value;
+  return updatedEmployee;
+}
+
+
+describe('employees', function() {
+  let employee;
+
+  beforeEach(function () {
+    employee = { name: 'Sam' };
   });
 
   describe('destructivelyUpdateEmployeeWithKeyAndValue(employee, key, value)', function () {
@@ -36,6 +49,18 @@ describe('employees', function() {
         streetAddress: '12 Broadway'
       });
     });
+  });
+
+  function destructivelyUpdateEmployeeWithKeyAndValue(employee, key, value) {
+    employee[key] = value;
+    return employee;
+  }
+});
+describe('employees', function() {
+  let employee;
+
+  beforeEach(function () {
+    employee = { name: 'Sam' };
   });
 
   describe('deleteFromEmployeeByKey(employee, key)', function () {
@@ -53,7 +78,12 @@ describe('employees', function() {
     });
   });
 
-  describe('destructivelyDeleteFromEmployeeByKey(employee, key)', function () {
+  function deleteFromEmployeeByKey(employee, key) {
+    const clonedEmployee = { ...employee };
+    delete clonedEmployee[key];
+    return clonedEmployee;
+  }
+});'destructivelyDeleteFromEmployeeByKey(employee, key)', function () {
     it('returns employee without the deleted key/value pair', function () {
       let newEmployee = destructivelyDeleteFromEmployeeByKey(employee, 'name');
 
@@ -66,5 +96,4 @@ describe('employees', function() {
       expect(employee['name']).to.equal(undefined);
       expect(employee).to.equal(newEmployee);
     });
-  });
-});
+  };
